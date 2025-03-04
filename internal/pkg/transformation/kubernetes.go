@@ -326,7 +326,12 @@ func (p *PodMapper) toDeviceToPod(
 					} else if strings.Contains(deviceID, "::") {
 						gpuInstanceID := strings.Split(deviceID, "::")[0]
 						deviceToPodMap[gpuInstanceID] = podInfo
+					} else if strings.HasPrefix(deviceID, "pgpu") {
+						// nerDevices{&ContainerDevices{ResourceName:tke.cloud.tencent.com/qgpu-core,DeviceIds:[pgpu3-25],},
+						gpuInstanceID := strings.Split(strings.TrimPrefix(deviceID, "pgpu"), "-")[0]
+						deviceToPodMap[gpuInstanceID] = podInfo
 					}
+
 					// Default mapping between deviceID and pod information
 					deviceToPodMap[deviceID] = podInfo
 				}
